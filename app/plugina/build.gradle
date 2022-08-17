@@ -1,0 +1,97 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.raeblog.com/repository/public/' }
+        google()
+    }
+
+    dependencies {
+        classpath "com.tencent.shadow.core:runtime:$shadowVersion"
+        classpath "com.tencent.shadow.core:activity-container:$shadowVersion"
+        classpath "com.tencent.shadow.core:gradle-plugin:$shadowVersion"
+        classpath "org.javassist:javassist:3.28.0-GA"
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'com.tencent.shadow.plugin'
+apply plugin: 'org.jetbrains.kotlin.android'
+
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "com.shadow.plugina"
+        minSdk 21
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    // 将插件applicationId设置为和宿主相同
+    productFlavors {
+        plugin {
+            applicationId 'com.wink.app'
+        }
+    }
+
+    aaptOptions {
+        additionalParameters "--package-id", "0x7E", "--allow-reserved-package-id"
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
+    pluginCompileOnly "com.tencent.shadow.core:runtime:$shadowVersion"
+}
+shadow {
+    packagePlugin {
+        pluginTypes {
+            debug {
+                loaderApkConfig = new Tuple2('loader-debug.apk', ':wink:loader:assembleDebug')
+                runtimeApkConfig = new Tuple2('runtime-debug.apk', ':wink:runtime:assembleDebug')
+                pluginApks {
+                    pluginApk1 {
+                        businessName = 'plugin-a'
+                        partKey = 'plugin-a'
+                        buildTask = ':app:plugina:assembleDebug'
+                        apkPath = "app/plugina/build/outputs/apk/plugin/debug/plugina-plugin-debug.apk"
+                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
+                    }
+                }
+            }
+        }
+
+        loaderApkProjectPath = 'wink/loader'
+        runtimeApkProjectPath = 'wink/runtime'
+
+        archiveSuffix = ""
+        archivePrefix = 'plugin'
+        destinationDir = rootProject.buildDir
+
+        version = 1
+//        compactVersion = [1, 2, 3]
+        uuidNickName = "1.0.0"
+    }
+}
+
+

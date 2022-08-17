@@ -1,0 +1,24 @@
+pluginManagement {
+    repositories {
+        maven { url 'https://maven.raeblog.com/repository/public/' }
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        maven { url 'https://maven.raeblog.com/repository/public/' }
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "Wink"
+include ':app'
+include ':wink'
+//include ':plugin-demo'
+include ':wink:loader'
+include ':wink:runtime'
+include ':app:plugina'
+include ':app:pluginb'

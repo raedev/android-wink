@@ -1,0 +1,39 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    compileSdk 32
+    defaultConfig {
+        minSdk 21
+        targetSdk 32
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    compileOnly 'androidx.core:core-ktx:1.8.0'
+    compileOnly 'androidx.appcompat:appcompat:1.4.2'
+
+
+    implementation "com.tencent.shadow.core:loader:$shadowVersion"
+    implementation "com.tencent.shadow.dynamic:loader:$shadowVersion"
+    implementation "com.tencent.shadow.dynamic:loader-impl:$shadowVersion"
+    compileOnly "com.tencent.shadow.core:runtime:$shadowVersion"
+    compileOnly "com.tencent.shadow.core:activity-container:$shadowVersion"
+    compileOnly "com.tencent.shadow.core:common:$shadowVersion"
+    compileOnly "com.tencent.shadow.dynamic:host:$shadowVersion"
+    compileOnly project(':wink')
+}

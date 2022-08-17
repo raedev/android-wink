@@ -1,0 +1,42 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
+}
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 32
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    // 核心依赖
+    implementation 'androidx.swift:core-ktx:1.0.0'
+    implementation "com.squareup.okhttp3:okhttp:4.10.0"
+    implementation('com.google.code.gson:gson:2.9.1')
+    // shadow插件
+    implementation "com.tencent.shadow.core:common:$shadowVersion"
+    implementation "com.tencent.shadow.dynamic:host:$shadowVersion"
+    implementation "com.tencent.shadow.dynamic:manager:$shadowVersion"
+    implementation "com.tencent.shadow.core:manager:$shadowVersion"
+    implementation "com.tencent.shadow.dynamic:loader:$shadowVersion"
+}

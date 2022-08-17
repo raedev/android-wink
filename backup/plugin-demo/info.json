@@ -1,0 +1,11 @@
+{
+  "name": "plugin-demo",
+  "title": "演示插件",
+  "desc": "说明文档",
+  "hostVersionCode": 1,
+  "versionCode": 1,
+  "versionName": "1.0.0",
+  "config": {
+    "abc": "123"
+  }
+}

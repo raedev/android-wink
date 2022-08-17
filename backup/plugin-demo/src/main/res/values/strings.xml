@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">plugin-demo</string>
+    <string name="plugin_name">演示插件</string>
+</resources>
