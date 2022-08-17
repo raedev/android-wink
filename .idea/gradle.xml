@@ -12,10 +12,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/app/plugina" />
-            <option value="$PROJECT_DIR$/app/pluginb" />
+            <option value="$PROJECT_DIR$/plugin-common" />
             <option value="$PROJECT_DIR$/wink" />
-            <option value="$PROJECT_DIR$/wink/loader" />
-            <option value="$PROJECT_DIR$/wink/runtime" />
           </set>
         </option>
       </GradleProjectSettings>

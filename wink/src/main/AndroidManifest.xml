@@ -1,33 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?><!--suppress AndroidDomInspection -->
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.raedev.wink">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
-        <!--插件线程-->
-        <service
-            android:name=".pm.WinkPluginService"
-            android:exported="false"
-            android:process=":winkPPS" />
-
-        <!--注册Runtime-->
-        <activity
-            android:name="com.raedev.wink.runtime.WinkPluginActivity"
-            android:exported="true" />
-        <activity
-            android:name="com.raedev.wink.runtime.WinkSinglePluginActivity"
-            android:exported="true"
-            android:launchMode="singleInstance" />
-        <activity
-            android:name="com.raedev.wink.runtime.WinkTaskPluginActivity"
-            android:exported="true"
-            android:launchMode="singleTask" />
-
-        <provider
-            android:authorities="${applicationId}.contentprovider.authority.dynamic"
-            android:name="com.tencent.shadow.core.runtime.container.PluginContainerContentProvider"
-            android:grantUriPermissions="true" />
-
+<!--        &lt;!&ndash;插件安装服务&ndash;&gt;-->
+<!--        <service-->
+<!--            android:name=".pm.PluginPackageManagerService"-->
+<!--            android:exported="false" />-->
     </application>
 </manifest>

@@ -17,8 +17,6 @@ dependencyResolutionManagement {
 rootProject.name = "Wink"
 include ':app'
 include ':wink'
-//include ':plugin-demo'
-include ':wink:loader'
-include ':wink:runtime'
 include ':app:plugina'
-include ':app:pluginb'
+//include ':app:pluginb'
+include ':plugin-common'

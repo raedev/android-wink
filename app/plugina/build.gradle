@@ -1,19 +1,4 @@
-buildscript {
-    repositories {
-        maven { url 'https://maven.raeblog.com/repository/public/' }
-        google()
-    }
-
-    dependencies {
-        classpath "com.tencent.shadow.core:runtime:$shadowVersion"
-        classpath "com.tencent.shadow.core:activity-container:$shadowVersion"
-        classpath "com.tencent.shadow.core:gradle-plugin:$shadowVersion"
-        classpath "org.javassist:javassist:3.28.0-GA"
-    }
-}
-
 apply plugin: 'com.android.application'
-apply plugin: 'com.tencent.shadow.plugin'
 apply plugin: 'org.jetbrains.kotlin.android'
 
 
@@ -21,7 +6,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.shadow.plugina"
+        applicationId "com.wink.plugin.a"
         minSdk 21
         targetSdk 32
         versionCode 1
@@ -42,56 +27,50 @@ android {
         jvmTarget = '1.8'
     }
 
-    // 将插件applicationId设置为和宿主相同
-    productFlavors {
-        plugin {
-            applicationId 'com.wink.app'
-        }
-    }
-
+    // 将插件的资源ID分区改为和宿主0x7F不同的值
     aaptOptions {
         additionalParameters "--package-id", "0x7E", "--allow-reserved-package-id"
     }
 }
 
 dependencies {
-
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-
-    pluginCompileOnly "com.tencent.shadow.core:runtime:$shadowVersion"
+    implementation 'com.google.android.material:material:1.5.0'
+    compileOnly project(':wink')
+    compileOnly project(':plugin-common')
 }
-shadow {
-    packagePlugin {
-        pluginTypes {
-            debug {
-                loaderApkConfig = new Tuple2('loader-debug.apk', ':wink:loader:assembleDebug')
-                runtimeApkConfig = new Tuple2('runtime-debug.apk', ':wink:runtime:assembleDebug')
-                pluginApks {
-                    pluginApk1 {
-                        businessName = 'plugin-a'
-                        partKey = 'plugin-a'
-                        buildTask = ':app:plugina:assembleDebug'
-                        apkPath = "app/plugina/build/outputs/apk/plugin/debug/plugina-plugin-debug.apk"
-                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
-                    }
-                }
-            }
+
+task copyInfo() {
+    doLast {
+        def infoFile = file("info.json")
+        def outDir = file(project.buildDir.path + "/outputs/apk/debug/")
+        if (!infoFile.exists()) throw new GradleException('请在项目插件目录下创建info.json文件')
+        copy {
+            from infoFile
+            into outDir
         }
-
-        loaderApkProjectPath = 'wink/loader'
-        runtimeApkProjectPath = 'wink/runtime'
-
-        archiveSuffix = ""
-        archivePrefix = 'plugin'
-        destinationDir = rootProject.buildDir
-
-        version = 1
-//        compactVersion = [1, 2, 3]
-        uuidNickName = "1.0.0"
+    }
+}
+task zipPlugin(type: Zip) {
+    archiveName rootProject.buildDir.path + "/plugin-debug.zip"
+    from(file("${project.buildDir.path}/outputs/apk/debug").listFiles()) {
+        exclude 'output-metadata.json'
+        exclude '*.zip'
     }
 }
 
+// 构建插件
+task buildPlugin(group: 'plugin') {
+    dependsOn copyInfo, ':app:plugina:assembleDebug', zipPlugin
+    doLast {
+        def file = file(rootProject.buildDir.path + "/plugin-debug.zip")
+        if (!file.exists()) {
+            throw new GradleException('插件包不存在')
+        }
+        exec {
+            commandLine 'cmd.exe', "/c", "adb.exe push ${file.path} /sdcard/Android/data/com.wink.app/cache/plugin/download/"
+        }
+    }
+}
 

@@ -29,14 +29,16 @@ android {
 dependencies {
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
-    // 核心依赖
     implementation 'androidx.swift:core-ktx:1.0.0'
     implementation "com.squareup.okhttp3:okhttp:4.10.0"
     implementation('com.google.code.gson:gson:2.9.1')
-    // shadow插件
-    implementation "com.tencent.shadow.core:common:$shadowVersion"
-    implementation "com.tencent.shadow.dynamic:host:$shadowVersion"
-    implementation "com.tencent.shadow.dynamic:manager:$shadowVersion"
-    implementation "com.tencent.shadow.core:manager:$shadowVersion"
-    implementation "com.tencent.shadow.dynamic:loader:$shadowVersion"
 }
+
+ext {
+    ARTIFACT_URL = 'https://github.com/raedev/android-wink'
+    ARTIFACT_GROUP = 'com.github.raedev'
+    ARTIFACT_ID = 'wink'
+    ARTIFACT_VERSION = '1.0.0'
+}
+
+apply from: 'upload.gradle'

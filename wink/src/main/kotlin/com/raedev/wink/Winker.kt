@@ -1,46 +1,58 @@
 package com.raedev.wink
 
+import android.app.Activity
 import android.app.Application
-import android.content.Intent
+import androidx.fragment.app.Fragment
 import com.raedev.wink.content.PluginInstallInfo
+import com.raedev.wink.content.PluginIntent
+import com.raedev.wink.content.PluginLoadedApk
+import com.raedev.wink.listener.IPluginElementLoadListener
+import com.raedev.wink.listener.IPluginLoadListener
 import com.raedev.wink.pm.PluginManager
-import com.raedev.wink.utils.AndroidLogLoggerFactory
-import com.tencent.shadow.core.common.LoggerFactory
+import com.raedev.wink.utils.ResourcesUtil
 
 /**
  * 插件入口
  * @author RAE
- * @date 2022/08/16
+ * @date 2022/08/15
  * @copyright Copyright (c) https://github.com/raedev All rights reserved.
  */
 object Winker {
 
-    /**
-     * 全局Context
-     */
-    lateinit var context: Application
+    internal lateinit var context: Application
+    private lateinit var pluginManager: PluginManager
 
-    /**
-     * 获取插件管理器
-     */
-    val pluginManager: PluginManager by lazy {
-        PluginManager(context)
+    fun init(context: Application) {
+        this.context = context
+        pluginManager = PluginManager(context)
     }
 
-    /**
-     * 初始化Wink
-     */
-    fun init(application: Application) {
-        this.context = application
-        LoggerFactory.setILoggerFactory(AndroidLogLoggerFactory())
+    fun addPluginListener(listener: IPluginLoadListener) {
+        pluginManager.addPluginListener(listener)
     }
 
-    fun install(inf: PluginInstallInfo) {
-        this.pluginManager.install(inf)
+    fun removePluginListener(listener: IPluginLoadListener) {
+        pluginManager.removePluginListener(listener)
     }
 
-    fun startActivity(pluginName: String, intent: Intent) {
-        this.pluginManager.startActivity(pluginName, intent)
+    fun install(installInfo: PluginInstallInfo) {
+        pluginManager.install(installInfo)
     }
 
+    fun createFragment(
+        pluginIntent: PluginIntent,
+        listener: IPluginElementLoadListener<Fragment>
+    ) {
+        pluginManager.createFragment(pluginIntent, listener)
+    }
+
+    fun getLoadedPlugin(pluginName: String): PluginLoadedApk? {
+        return pluginManager.getLoadedPlugin(pluginName)
+    }
+
+    fun attachToActivity(context: Activity, plugin: PluginLoadedApk) {
+        context.classLoader
+        // 加载完毕后更新资源
+        ResourcesUtil.addAssetPath(context.assets, plugin.pluginInfo.apkFile)
+    }
 }

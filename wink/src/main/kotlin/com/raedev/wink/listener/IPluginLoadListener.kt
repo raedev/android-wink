@@ -1,8 +1,7 @@
 package com.raedev.wink.listener
 
-import com.raedev.wink.content.PluginInfo
 import com.raedev.wink.content.PluginInstallInfo
-
+import com.raedev.wink.content.PluginLoadedApk
 
 /**
  * 插件加载回调
@@ -15,15 +14,15 @@ interface IPluginLoadListener {
     /**
      * 插件正在下载
      */
-    fun onPluginDownloading(installInfo: PluginInstallInfo, progress: Int) = Unit
+    fun onPluginDownloading(installInfo: PluginInstallInfo, progress: Int)
 
     /**
      * 插件加载成功
      */
-    fun onPluginLoaded(plugin: PluginInfo)
+    fun onPluginLoaded(plugin: PluginLoadedApk)
 
     /**
      * 插件加载失败
      */
-    fun onPluginError(message: String, ex: Exception? = null) = Unit
+    fun onPluginError(message: String, ex: Exception? = null)
 }

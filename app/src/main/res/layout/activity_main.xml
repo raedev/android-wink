@@ -19,27 +19,36 @@
             android:background="#FF9800"
             android:padding="12dp"
             android:text="提示信息区域"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btn_load_plugin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="加载插件" />
+            android:text="安装插件" />
 
 
         <Button
             android:id="@+id/btn_start_plugin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="启动插件" />
+            android:text="加载Fragment" />
 
-        <Button
-            android:id="@+id/btn_load_fragment"
+        <FrameLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="加载插件中的Fragment" />
+            android:layout_marginTop="10dp"
+            android:background="#4CAF50"
+            android:minHeight="200dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="这里是动态加载Fragment区"
+                android:textColor="@color/white" />
+        </FrameLayout>
 
     </LinearLayout>
 

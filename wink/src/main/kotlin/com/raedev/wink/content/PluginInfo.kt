@@ -1,8 +1,12 @@
 package com.raedev.wink.content
 
+import android.content.Context
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.os.Parcelable
-import com.tencent.shadow.core.manager.installplugin.InstalledPlugin
 import kotlinx.parcelize.Parcelize
+import java.io.File
+
 
 /**
  * 插件包信息，从插件包<info.json>文件中读取。
@@ -22,14 +26,31 @@ data class PluginInfo(
     var versionCode: Int,
     /** 显示的版本号 */
     var versionName: String,
+    /** 插件包加载依赖，配置后从插件包加载类，默认是加载插件包packageName的类。 */
+    var dependencies: List<String>? = null
 ) : Parcelable {
 
+    lateinit var apkFile: File
+    lateinit var packageName: String
+    lateinit var packageInfo: PackageInfo
 
-    constructor(p: InstalledPlugin.PluginPart) : this(
-        p.businessName,
-        p.businessName,
-        0, 0, ""
-    )
+    internal fun load(context: Context, file: File) {
+        this.apkFile = file
+        this.packageInfo = context.packageManager.getPackageArchiveInfo(
+            apkFile.path,
+            PackageManager.GET_ACTIVITIES
+                    or PackageManager.GET_PERMISSIONS
+                    or PackageManager.GET_META_DATA
+                    or PackageManager.GET_SERVICES
+                    or PackageManager.GET_CONFIGURATIONS
+                    or PackageManager.GET_RECEIVERS
+                    or PackageManager.GET_PROVIDERS
+        ) ?: throw NullPointerException("解析插件包信息错误")
 
+        this.packageName = packageInfo.packageName
+        packageInfo.applicationInfo.sourceDir = file.path
+        packageInfo.applicationInfo.publicSourceDir = file.path
+        packageInfo.applicationInfo.dataDir = File(file.parent, "data").path
 
+    }
 }
